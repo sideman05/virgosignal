@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+
+# Block sensitive or unnecessary files
+Disallow: /admin/
+Disallow: /private/
+Disallow: /tmp/
+Disallow: /cgi-bin/
+
+# Allow important assets
+Allow: /style.css
+Allow: /script.js
+Allow: /images/
+
+# Sitemap location
+Sitemap: https://www.virgosignal.online/sitemap.xml
