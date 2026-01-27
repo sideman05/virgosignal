@@ -160,20 +160,57 @@
 
     <script>
         // Handle download button click
-        function handleDownload() {
-            const downloadBtn = document.querySelector('.download-btn');
-            
-            // Show loading state
-            downloadBtn.innerHTML = '<svg viewBox="0 0 24 24" style="animation: spin 1s linear infinite;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="currentColor"/></svg> Processing...';
-            downloadBtn.style.pointerEvents = 'none';
-            downloadBtn.style.opacity = '0.8';
+function handleDownload(event) {
+    if (event) {
+        event.preventDefault();
+    }
+    
+    const downloadBtn = document.querySelector('.download-btn');
+    
+    // Show loading state
+    const originalContent = downloadBtn.innerHTML;
+    downloadBtn.innerHTML = '<svg viewBox="0 0 24 24" style="width: 20px; height: 20px; animation: spin 1s linear infinite; fill: currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg> Processing...';
+    downloadBtn.style.pointerEvents = 'none';
+    downloadBtn.style.opacity = '0.8';
 
-            // Simulate download processing and redirect to thank you page
-            setTimeout(() => {
-                window.location.href = 'thanks.html';
-            }, 1500);
-        }
-
+    // Replace with your actual APK download URL
+    // You can host the APK on:
+    // - Your own server: 'https://yourdomain.com/downloads/virgo-signal.apk'
+    // - Google Drive: Get the direct download link
+    // - GitHub Releases: 'https://github.com/username/repo/releases/download/v1.0/app.apk'
+    // - Dropbox: Get the direct download link
+    const apkUrl = 'Virgo Signal.apk';
+    
+    // Detect user's OS and provide appropriate download
+    const userAgent = navigator.userAgent.toLowerCase();
+    let downloadUrl = apkUrl;
+    
+    if (userAgent.includes('windows')) {
+        downloadUrl = 'YOUR_WINDOWS_DOWNLOAD_LINK';
+    } else if (userAgent.includes('mac')) {
+        downloadUrl = 'YOUR_MAC_DOWNLOAD_LINK';
+    } else if (userAgent.includes('android')) {
+        downloadUrl = apkUrl;
+    }
+    
+    // Create a temporary link to trigger download
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'virgo-signal.apk'; // Name of the downloaded file
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    
+    // Trigger the download
+    link.click();
+    
+    // Clean up
+    document.body.removeChild(link);
+    
+    // Wait a bit for download to start, then redirect to thank you page
+    setTimeout(() => {
+        window.location.href = 'thanks.html';
+    }, 1500);
+}
         // Mobile menu toggle
         const hamburger = document.querySelector('.hamburger');
         const navMenu = document.querySelector('.nav-menu');

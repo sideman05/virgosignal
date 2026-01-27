@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thank You - VIRGO SIGNAL</title>
+    <title>Thank You - VIRGO SIGNAL Download</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -25,10 +26,9 @@
                 <li><a href="index.html#home" class="nav-link">Home</a></li>
                 <li><a href="index.html#features" class="nav-link">Features</a></li>
                 <li><a href="index.html#stats" class="nav-link">Stats</a></li>
-                <li><a href="download.html" class="nav-link">Download</a></li>
+                <li><a href="index.html#download" class="nav-link">Download</a></li>
                 <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
                 <li><a href="index.html#contact" class="nav-link">Contact</a></li>
-                <li><a href="https://web-seven-gold-37.vercel.app" class="nav-link">Mines</a></li>
             </ul>
             <div class="nav-controls">
                 <button id="theme-toggle" class="control-btn" title="Toggle Theme">
@@ -39,11 +39,6 @@
                         <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
                     </svg>
                 </button>
-                <select id="language-select" class="control-btn">
-                    <option value="en">EN</option>
-                    <option value="fr">FR</option>
-                    <option value="sw">SW</option>
-                </select>
             </div>
             <div class="hamburger">
                 <span></span>
@@ -52,66 +47,99 @@
             </div>
         </div>
     </nav>
+
     <div class="container">
-        <div class="success-icon">✓</div>
-        <h1>Thank You!</h1>
-        <p class="subtitle">Your download has been initiated successfully</p>
-        
-        <p class="message">
-            We're thrilled you've chosen VIRGO SIGNAL! Your APK is now downloading to your device. 
-            This advanced prediction tool is ready to transform your gaming experience.
-        </p>
+        <div class="download-container thanks-container">
+            <!-- Success Icon -->
+            <div class="logo-section">
+                <div class="success-icon">✓</div>
+            </div>
 
-        <div class="download-info">
-            <strong>Download Status:</strong><br>
-            Check your device's download folder for "Virgo Signal.apk"<br>
-            If the download hasn't started, <a href="Virgo Signal.apk" download style="color: #00D4FF;">click here to download manually</a>
+            <!-- Main Message -->
+            <h1>Thank You for Downloading!</h1>
+            <p class="message">
+                Your download should start automatically. If it doesn't, please click the button below to download manually.
+            </p>
+
+            <!-- Download Info Box -->
+            <div class="download-info">
+                <strong>Download Details:</strong>
+                <p>VIRGO SIGNAL v1.0.0 for Android</p>
+                <p>File size: ~15 MB</p>
+                <p>If your download didn't start, <a href="#" onclick="retryDownload()">click here to retry</a>.</p>
+            </div>
+
+            <!-- Next Steps -->
+            <div class="next-steps">
+                <h3>Installation Steps</h3>
+                <ol>
+                    <li><strong>Enable Unknown Sources:</strong> Go to Settings → Security → Enable "Install from Unknown Sources"</li>
+                    <li><strong>Locate the APK:</strong> Open your Downloads folder or notification panel</li>
+                    <li><strong>Install:</strong> Tap on the APK file and follow the installation prompts</li>
+                    <li><strong>Open App:</strong> Once installed, open VIRGO SIGNAL and start predicting!</li>
+                    <li><strong>Grant Permissions:</strong> Allow necessary permissions for optimal performance</li>
+                </ol>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-group">
+                <a href="index.html" class="btn btn-primary">
+                    <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+                    </svg>
+                    Back to Home
+                </a>
+                <a href="index.html#faq" class="btn btn-secondary">
+                    <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                    </svg>
+                    View FAQ
+                </a>
+            </div>
+
+            <!-- Support Section -->
+            <!-- <div class="download-info" style="margin-top: 3rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">Need Help?</h3>
+                <p>If you encounter any issues during installation or need assistance:</p>
+                <div style="margin-top: 1rem;">
+                    <p>📧 Email: <a href="mailto:support@virgosignal.com">support@virgosignal.com</a></p>
+                    <p>💬 WhatsApp: <a href="https://wa.me/1234567890">+1 (234) 567-890</a></p>
+                    <p>🐦 Twitter: <a href="https://twitter.com/virgosignal">@virgosignal</a></p>
+                </div>
+            </div> -->
+
+            <!-- Warning -->
+            <!-- <div class="warning-box">
+                <p>
+                    <span class="warning-icon">⚠️</span>
+                    <strong>Important:</strong> VIRGO SIGNAL is for entertainment and educational purposes only. 
+                    Please gamble responsibly and within your means. This app does not guarantee winnings.
+                </p>
+            </div> -->
         </div>
 
-        <div class="next-steps">
-            <h3>Next Steps:</h3>
-            <ol>
-                <li>Wait for the APK file to complete downloading</li>
-                <li>Locate the file in your Downloads folder</li>
-                <li>Tap the file to begin installation</li>
-                <li>Grant necessary permissions when prompted</li>
-                <li>Launch the app and start predicting!</li>
-            </ol>
-        </div>
-
-        <div class="button-group">
-            <a href="index.html" class="btn btn-secondary">Back to Home</a>
-            <a href="download.html" class="btn btn-primary">Download Again</a>
-        </div>
-
-        <div class="download-info">
-            <strong>Troubleshooting:</strong><br>
-            If you have issues installing, ensure "Unknown Sources" is enabled in your Android settings under Security. For detailed support, contact our team.
-        </div>
-
-        <div class="footer">
-            <p>© 2026 VIRGO GAMER MINES SIGNALS. All rights reserved.</p>
-            <p style="margin-top: 1rem;">Need help? Contact us: <a href="https://wa.me/255618587348?text=Habari%2C%20naomba%20msaada%20wa..." target="_blank">WhatsApp Support</a></p>
-        </div>
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2025 VIRGO SIGNAL. All rights reserved.</p>
+            <p>
+                <a href="index.html#faq">FAQ</a> | 
+                <a href="index.html#contact">Contact</a> | 
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </p>
+        </footer>
     </div>
 
     <script>
-        // Trigger actual download when page loads
-        window.addEventListener('load', function() {
-            // You can add actual download logic here if needed
-            // For now, just show the success message
-            console.log('Thank you page loaded - download initiated');
-        });
-
-        // Mobile menu toggle
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-
-        if (hamburger) {
-            hamburger.addEventListener('click', function() {
-                navMenu.classList.toggle('active');
-                hamburger.classList.toggle('active');
-            });
+        // Retry download function
+        function retryDownload() {
+            const apkUrl = 'YOUR_APK_DOWNLOAD_LINK_HERE.apk';
+            const link = document.createElement('a');
+            link.href = apkUrl;
+            link.download = 'virgo-signal.apk';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Theme Toggle Functionality
@@ -120,7 +148,6 @@
         const moonIcon = themeToggle.querySelector('.moon-icon');
         const body = document.body;
 
-        // Check for saved theme preference or default to light mode
         const currentTheme = localStorage.getItem('theme') || 'light';
         if (currentTheme === 'dark') {
             body.classList.add('dark-theme');
@@ -143,65 +170,29 @@
             }
         });
 
-        // Language Translation Functionality
-        const languageSelect = document.getElementById('language-select');
-        const currentLang = localStorage.getItem('language') || 'en';
-        languageSelect.value = currentLang;
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
 
-        // Translation dictionary for thanks page
-        const thanksTranslations = {
-            en: {
-                home: "Home",
-                features: "Features",
-                stats: "Stats",
-                download: "Download",
-                faq: "FAQ",
-                contact: "Contact",
-                "thanks-title": "Thank You for Downloading!",
-                "thanks-subtitle": "Your download has started successfully",
-                "thanks-message": "VIRGO SIGNAL is now downloading to your device. Please follow the installation instructions below to get started.",
-                "next-steps-title": "Next Steps",
-                "back-home": "Back to Home",
-                "download-another": "Download Another Version"
-            },
-
-        };
-
-        function translateThanksPage(lang) {
-            // Translate navigation
-            document.querySelectorAll('.nav-link').forEach(link => {
-                const key = link.textContent.toLowerCase();
-                if (thanksTranslations[lang] && thanksTranslations[lang][key]) {
-                    link.textContent = thanksTranslations[lang][key];
-                }
+        if (hamburger) {
+            hamburger.addEventListener('click', function() {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
             });
-
-            // Translate specific elements
-            const elementsToTranslate = [
-                { selector: 'h1', key: 'thanks-title' },
-                { selector: '.subtitle', key: 'thanks-subtitle' },
-                { selector: '.message', key: 'thanks-message' },
-                { selector: '.next-steps h3', key: 'next-steps-title' },
-                { selector: '.btn-secondary', key: 'back-home' },
-                { selector: '.btn-primary', key: 'download-another' }
-            ];
-
-            elementsToTranslate.forEach(({ selector, key }) => {
-                const element = document.querySelector(selector);
-                if (element && thanksTranslations[lang] && thanksTranslations[lang][key]) {
-                    element.textContent = thanksTranslations[lang][key];
-                }
-            });
-
-            localStorage.setItem('language', lang);
         }
 
-        languageSelect.addEventListener('change', (e) => {
-            translateThanksPage(e.target.value);
+        // Animate success icon on load
+        window.addEventListener('load', () => {
+            const successIcon = document.querySelector('.success-icon');
+            successIcon.style.opacity = '0';
+            successIcon.style.transform = 'scale(0)';
+            
+            setTimeout(() => {
+                successIcon.style.transition = 'all 0.5s ease';
+                successIcon.style.opacity = '1';
+                successIcon.style.transform = 'scale(1)';
+            }, 200);
         });
-
-        // Initialize translation
-        translateThanksPage(currentLang);
     </script>
 </body>
 </html>
