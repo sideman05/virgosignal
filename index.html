@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIRGO SIGNAL - 1Win Mines Predictor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Popup Overlay */
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .popup-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Popup Container */
+        .popup-container {
+            background: var(--background);
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            padding: 3rem 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.7);
+            transition: transform 0.3s ease;
+        }
+
+        .popup-overlay.active .popup-container {
+            transform: scale(1);
+        }
+
+        /* Close Button */
+        .popup-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .popup-close:hover {
+            background: var(--background-secondary);
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        /* Popup Header */
+        .popup-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .popup-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .popup-subtitle {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* Popup Body */
+        .popup-body {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .popup-message {
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .popup-features {
+            display: grid;
+            gap: 0.75rem;
+            text-align: left;
+            margin: 1.5rem 0;
+        }
+
+        .popup-feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            background: var(--background-secondary);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .popup-feature-item:hover {
+            background: var(--background-tertiary);
+            transform: translateX(5px);
+        }
+
+        .popup-feature-icon {
+            font-size: 1.5rem;
+        }
+
+        .popup-feature-text {
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        /* Popup Footer */
+        .popup-footer {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .popup-btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .popup-btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .popup-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .popup-btn-secondary {
+            background: var(--background-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .popup-btn-secondary:hover {
+            background: var(--background-tertiary);
+            border-color: var(--primary);
+        }
+
+        /* Don't Show Again Checkbox */
+        .popup-checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .popup-checkbox-container input[type="checkbox"] {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .popup-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .popup-title {
+                font-size: 1.5rem;
+            }
+
+            .popup-icon {
+                font-size: 3rem;
+            }
+
+            .popup-message {
+                font-size: 1rem;
+            }
+
+            .popup-footer {
+                flex-direction: column;
+            }
+
+            .popup-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="grid-overlay"></div>
+    
+    <!-- Welcome Popup -->
+    <div class="popup-overlay" id="welcomePopup">
+        <div class="popup-container">
+            <button class="popup-close" onclick="closePopup()">&times;</button>
+            
+            <div class="popup-header">
+                <div class="popup-icon">🎯</div>
+                <h2 class="popup-title">Welcome to VIRGO SIGNAL!</h2>
+                <p class="popup-subtitle">Advanced Prediction System</p>
+            </div>
+            
+            <div class="popup-body">
+                <p class="popup-message">
+                    Get ready to experience the most advanced prediction tool for 1Win Mines
+                </p>
+                
+                <div class="popup-features">
+                    <div class="popup-feature-item">
+                        <span class="popup-feature-icon">⚡</span>
+                        <span class="popup-feature-text">Real-time predictions with 95% accuracy</span>
+                    </div>
+                    <div class="popup-feature-item">
+                        <span class="popup-feature-icon">📊</span>
+                        <span class="popup-feature-text">Advanced pattern recognition system</span>
+                    </div>
+                    <div class="popup-feature-item">
+                        <span class="popup-feature-icon">🔒</span>
+                        <span class="popup-feature-text">Secure and encrypted platform</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="popup-footer">
+                <a href="#download" class="popup-btn popup-btn-primary" onclick="closePopup()">
+                    <svg style="width: 20px; height: 20px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                    </svg>
+                    Download Now
+                </a>
+                <button class="popup-btn popup-btn-secondary" onclick="closePopup()">
+                    Explore Features
+                </button>
+            </div>
+            
+            <div class="popup-checkbox-container">
+                <input type="checkbox" id="dontShowAgain">
+                <label for="dontShowAgain">Don't show this again</label>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <a href="index.html">
+                    <svg style="width: 24px; height: 24px; display: inline-block; vertical-align: middle; margin-right: 8px; fill: var(--primary);" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                    </svg>
+                    VIRGO SIGNAL
+                </a>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html#home" class="nav-link active">Home</a></li>
+                <li><a href="index.html#features" class="nav-link">Features</a></li>
+                <li><a href="index.html#stats" class="nav-link">Stats</a></li>
+                <li><a href="index.html#download" class="nav-link">Download</a></li>
+                <li><a href="index.html#faq" class="nav-link">FAQ</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+                <li><a href="https://web-seven-gold-37.vercel.app" class="nav-link">Mines</a></li>
+            </ul>
+            <div class="nav-controls">
+                <button id="theme-toggle" class="control-btn" title="Toggle Theme">
+                    <svg class="sun-icon" viewBox="0 0 24 24" width="20" height="20">
+                        <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z"/>
+                    </svg>
+                    <svg class="moon-icon" viewBox="0 0 24 24" width="20" height="20" style="display: none;">
+                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
+                    </svg>
+                </button>
+                <select id="language-select" class="control-btn">
+                    <option value="en">EN</option>
+                    <option value="fr">FR</option>
+                    <option value="sw">SW</option>
+                </select>
+            </div>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <header id="home">
+            <h1 class="logo">VIRGO SIGNAL</h1>
+            <p class="tagline">Advanced Prediction System</p>
+        </header>
+
+        <section class="hero">
+            <h2 class="hero-title">
+                <svg style="width: 40px; height: 40px; display: inline-block; vertical-align: middle; margin-right: 10px; fill: var(--primary);" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                </svg>
+                Predict 1Win Mines with Precision
+            </h2>
+            <p class="hero-description">
+                VIRGO SIGNAL is a cutting-edge prediction application designed to analyze and predict outcomes in 1Win Mines games. 
+                Using advanced algorithms and real-time data processing, get insights that give you an edge.
+            </p>
+        </section>
+
+        <section class="features" id="features">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 2v11h3v9l7-12h-4l4-8z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Real-Time Analysis</h3>
+                <p class="feature-text">Lightning-fast predictions powered by advanced algorithms that process data in milliseconds.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Pattern Recognition</h3>
+                <p class="feature-text">Sophisticated pattern detection system that identifies trends and opportunities.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Statistical Edge</h3>
+                <p class="feature-text">Comprehensive statistics and analytics to help you make informed decisions.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/>
+                    </svg>
+                </div>
+                <h3 class="feature-title">Secure & Safe</h3>
+                <p class="feature-text">Your data is protected with industry-standard encryption and security protocols.</p>
+            </div>
+        </section>
+
+        <section class="stats" id="stats">
+            <div class="stat-card">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Accuracy Rate</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">&lt;1s</div>
+                <div class="stat-label">Response Time</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Availability</div>
+            </div>
+        </section>
+
+        <section class="download-section" id="download">
+            <div class="download-box">
+                <h2 class="download-title">Download VIRGO SIGNAL</h2>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 2rem;">
+                    Get started with the latest version of VIRGO SIGNAL for  Android.
+                </p>
+                
+                <a href="download.html" class="download-btn">
+                    <svg style="width: 28px; height: 28px; fill: currentColor;" viewBox="0 0 24 24">
+                        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+                    </svg>
+                    Download Now
+                </a>
+                
+                <div class="version-info">
+                    Version 1.0.0  Android 8+
+                </div>
+            </div>
+        </section>
+
+        <!-- Screenshots Section -->
+        <section class="screenshots">
+            <h2 class="section-title">App Screenshots</h2>
+            <div class="screenshot-grid">
+                <div class="screenshot-item">
+                    <div class="screenshot-placeholder">
+                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5;" viewBox="0 0 24 24">
+                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                    </div>
+                    <p class="screenshot-caption">Dashboard View</p>
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-placeholder">
+                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5;" viewBox="0 0 24 24">
+                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                    </div>
+                    <p class="screenshot-caption">Prediction Interface</p>
+                </div>
+                <div class="screenshot-item">
+                    <div class="screenshot-placeholder">
+                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5;" viewBox="0 0 24 24">
+                            <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+                        </svg>
+                    </div>
+                    <p class="screenshot-caption">Analytics & Stats</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Video Demo Section -->
+        <section class="video-section">
+            <h2 class="section-title">Watch Demo</h2>
+            <div class="video-container">
+                <div class="video-placeholder">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z"/>
+                    </svg>
+                    <p style="font-size: 1.2rem;">See VIRGO SIGNAL in Action</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Replace with your YouTube embed or video URL</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <h2 class="section-title">What Users Say</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        VIRGO SIGNAL has completely changed my game! The predictions are incredibly accurate and the interface is super easy to use. Highly recommend!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">M</div>
+                        <div class="author-info">
+                            <div class="author-name">Michael R.</div>
+                            <div class="author-title">Active User</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        The real-time analysis is phenomenal. I've seen significant improvements in my decision-making. Best prediction tool I've used!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">S</div>
+                        <div class="author-info">
+                            <div class="author-name">Sarah K.</div>
+                            <div class="author-title">Pro User</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonial-card">
+                    <div class="rating">★★★★★</div>
+                    <p class="testimonial-text">
+                        Simple, fast, and effective. The pattern recognition feature is a game-changer. Worth every penny!
+                    </p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">J</div>
+                        <div class="author-info">
+                            <div class="author-name">James T.</div>
+                            <div class="author-title">Daily User</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq" id="faq">
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What is VIRGO SIGNAL?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        VIRGO SIGNAL is an advanced prediction application designed specifically for 1Win Mines games. It uses sophisticated algorithms to analyze patterns and provide real-time predictions to help inform your gaming decisions.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How accurate are the predictions?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Our prediction system maintains an average accuracy rate of 95% based on historical data analysis. However, please remember that no prediction system is 100% accurate, and results can vary. Always use the tool responsibly.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>What platforms is VIRGO SIGNAL available on?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        VIRGO SIGNAL is currently available for Windows (10 and above), macOS (12 and above), and Android (8.0 and above). iOS version is coming soon!
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Is VIRGO SIGNAL safe to use?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, absolutely! VIRGO SIGNAL uses industry-standard encryption to protect your data. We do not collect or store any sensitive personal information. Your privacy and security are our top priorities.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>Do I need an internet connection?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, VIRGO SIGNAL requires an active internet connection for real-time data analysis and predictions. A stable connection ensures the best performance and most accurate results.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>How much does it cost?</span>
+                        <svg class="faq-icon" viewBox="0 0 24 24">
+                            <path d="M7 10l5 5 5-5z"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        VIRGO SIGNAL offers a free trial period. After that, we have flexible subscription plans starting from $9.99/month. Check the app for current pricing and special offers!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact/Support Section -->
+        <section class="contact" id="contact">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-container">
+                <div class="contact-methods">
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24">
+                            <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                        </svg>
+                        <div class="contact-info">
+                            <div class="contact-label">Email</div>
+                            <div class="contact-value">
+                                <a href="mailto:support@virgosignal.com">support@virgosignal.com</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24">
+                            <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94L14.4 2.81c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+                        </svg>
+                        <div class="contact-info">
+                            <div class="contact-label">Support</div>
+                            <div class="contact-value">24/7 Live Chat Available</div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                        <div class="contact-info">
+                            <div class="contact-label">WhatsApp</div>
+                            <div class="contact-value">
+                                <a href="https://wa.me/1234567890" target="_blank">+1 (234) 567-890</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <svg class="contact-icon" viewBox="0 0 24 24">
+                            <path d="M22.46 6c-.85.38-1.78.64-2.75.76 1-.6 1.76-1.55 2.12-2.68-.93.55-1.96.96-3.06 1.18-.88-.94-2.13-1.53-3.52-1.53-2.67 0-4.84 2.17-4.84 4.84 0 .38.04.75.13 1.1-4.02-.2-7.58-2.13-9.96-5.05-.42.72-.66 1.55-.66 2.44 0 1.68.85 3.16 2.15 4.03-.79-.02-1.53-.24-2.18-.6v.06c0 2.34 1.67 4.29 3.88 4.74-.41.11-.83.17-1.27.17-.31 0-.62-.03-.92-.08.62 1.94 2.42 3.35 4.55 3.39-1.67 1.31-3.77 2.09-6.05 2.09-.39 0-.78-.02-1.17-.07 2.18 1.4 4.77 2.21 7.55 2.21 9.06 0 14-7.5 14-14 0-.21 0-.42-.02-.63.96-.69 1.8-1.56 2.46-2.55z"/>
+                        </svg>
+                        <div class="contact-info">
+                            <div class="contact-label">Twitter</div>
+                            <div class="contact-value">
+                                <a href="https://twitter.com/virgosignal" target="_blank">@virgosignal</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 VIRGO SIGNAL. All rights reserved.</p>
+            <p style="margin-top: 1rem; font-size: 0.9rem;">
+                Please gamble responsibly. If you have a gambling problem, seek help.
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Welcome Popup Functions
+        function showPopup() {
+            const popup = document.getElementById('welcomePopup');
+            const dontShow = localStorage.getItem('dontShowWelcome');
+            
+            if (!dontShow) {
+                setTimeout(() => {
+                    popup.classList.add('active');
+                }, 500);
+            }
+        }
+
+        function closePopup() {
+            const popup = document.getElementById('welcomePopup');
+            const checkbox = document.getElementById('dontShowAgain');
+            
+            if (checkbox.checked) {
+                localStorage.setItem('dontShowWelcome', 'true');
+            }
+            
+            popup.classList.remove('active');
+        }
+
+        // Close popup when clicking outside
+        document.getElementById('welcomePopup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePopup();
+            }
+        });
+
+        // Show popup on page load
+        window.addEventListener('load', showPopup);
+
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        if (hamburger) {
+            hamburger.addEventListener('click', function() {
+                hamburger.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            // Close menu when a link is clicked
+            navLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+        }
+
+        // Update active nav link based on scroll
+        window.addEventListener('scroll', function() {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').includes(current)) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        function handleDownload(event) {
+            event.preventDefault();
+            
+            // Replace this URL with your actual download link
+            const downloadUrl = 'YOUR_DOWNLOAD_LINK_HERE';
+            
+            const userAgent = navigator.userAgent.toLowerCase();
+            let selectedUrl = downloadUrl;
+            
+            if (userAgent.includes('windows')) {
+                selectedUrl = 'YOUR_WINDOWS_DOWNLOAD_LINK';
+            } else if (userAgent.includes('mac')) {
+                selectedUrl = 'YOUR_MAC_DOWNLOAD_LINK';
+            } else if (userAgent.includes('android')) {
+                selectedUrl = 'YOUR_ANDROID_DOWNLOAD_LINK';
+            }
+            
+            alert('Download starting... Please wait.');
+            console.log('Download would start for:', selectedUrl);
+        }
+
+        // Add some interactive elements
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // FAQ Toggle Function
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Open clicked item if it wasn't active
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Animate stats on scroll
+        const observerOptions = {
+            threshold: 0.5,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.stat-card').forEach(stat => {
+            stat.style.opacity = '0';
+            stat.style.transform = 'translateY(30px)';
+            stat.style.transition = 'all 0.6s ease';
+            observer.observe(stat);
+        });
+
+        // Theme Toggle Functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const sunIcon = themeToggle.querySelector('.sun-icon');
+        const moonIcon = themeToggle.querySelector('.moon-icon');
+        const body = document.body;
+
+        // Check for saved theme preference or default to light mode
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        if (currentTheme === 'dark') {
+            body.classList.add('dark-theme');
+            sunIcon.style.display = 'none';
+            moonIcon.style.display = 'block';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-theme');
+            const isDark = body.classList.contains('dark-theme');
+
+            if (isDark) {
+                sunIcon.style.display = 'none';
+                moonIcon.style.display = 'block';
+                localStorage.setItem('theme', 'dark');
+            } else {
+                sunIcon.style.display = 'block';
+                moonIcon.style.display = 'none';
+                localStorage.setItem('theme', 'light');
+            }
+        });
+
+        // Language Translation Functionality
+        const languageSelect = document.getElementById('language-select');
+        const currentLang = localStorage.getItem('language') || 'en';
+        languageSelect.value = currentLang;
+
+        // Translation dictionary
+        const translations = {
+            en: {
+                home: "Home",
+                features: "Features",
+                stats: "Stats",
+                download: "Download",
+                faq: "FAQ",
+                contact: "Contact",
+                "hero-title": "Predict Mines with Precision",
+                "hero-description": "Advanced AI-powered prediction system for 1Win Mines. Maximize your winnings with intelligent pattern recognition and real-time analysis.",
+                "download-btn": "Download Now",
+                "features-title": "Powerful Features",
+                "stats-title": "Proven Results",
+                "faq-title": "Frequently Asked Questions",
+                "contact-title": "Get in Touch"
+            },
+            fr: {
+                home: "Accueil",
+                features: "Fonctionnalités",
+                stats: "Statistiques",
+                download: "Télécharger",
+                faq: "FAQ",
+                contact: "Contact",
+                "hero-title": "Prédisez les Mines avec Précision",
+                "hero-description": "Système de prédiction avancé alimenté par IA pour 1Win Mines. Maximisez vos gains avec la reconnaissance intelligente des motifs et l'analyse en temps réel.",
+                "download-btn": "Télécharger Maintenant",
+                "features-title": "Fonctionnalités Puissantes",
+                "stats-title": "Résultats Prouvés",
+                "faq-title": "Questions Fréquemment Posées",
+                "contact-title": "Nous Contacter"
+            },
+            sw: {
+                home: "Nyumbani",
+                features: "Vipengele",
+                stats: "Takwimu",
+                download: "Pakua",
+                faq: "Maswali Yanayoulizwa Mara Kwa Mara",
+                contact: "Wasiliana",
+                "hero-title": "Tabiri Migodi kwa Usahihi",
+                "hero-description": "Mfumo wa hali ya juu wa utabiri unaoendeshwa na AI kwa 1Win Mines. Ongeza mapato yako kwa kutambua mifumo ya akili na uchambuzi wa wakati halisi.",
+                "download-btn": "Pakua Sasa",
+                "features-title": "Vipengele Vikali",
+                "stats-title": "Matokeo Thabitishwa",
+                "faq-title": "Maswali Yanayoulizwa Mara Kwa Mara",
+                "contact-title": "Wasiliana Nasi"
+            }
+        };
+
+        function translatePage(lang) {
+            // Translate navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                const key = link.textContent.toLowerCase();
+                if (translations[lang] && translations[lang][key]) {
+                    link.textContent = translations[lang][key];
+                }
+            });
+
+            // Translate specific elements
+            const elementsToTranslate = [
+                { selector: '.hero-title', key: 'hero-title' },
+                { selector: '.hero-description', key: 'hero-description' },
+                { selector: '.download-btn', key: 'download-btn' },
+                { selector: 'h2:contains("Powerful Features")', key: 'features-title' },
+                { selector: 'h2:contains("Proven Results")', key: 'stats-title' },
+                { selector: 'h2:contains("Frequently Asked Questions")', key: 'faq-title' },
+                { selector: 'h2:contains("Get in Touch")', key: 'contact-title' }
+            ];
+
+            elementsToTranslate.forEach(({ selector, key }) => {
+                const element = document.querySelector(selector);
+                if (element && translations[lang] && translations[lang][key]) {
+                    element.textContent = translations[lang][key];
+                }
+            });
+
+            localStorage.setItem('language', lang);
+        }
+
+        languageSelect.addEventListener('change', (e) => {
+            translatePage(e.target.value);
+        });
+
+        // Initialize translation
+        translatePage(currentLang);
+    </script>
+</body>
+</html>
