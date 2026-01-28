@@ -277,3 +277,4 @@ languageSelect.addEventListener('change', (e) => {
 
 // Initialize translation
 translatePage(currentLang);
+

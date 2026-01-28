@@ -290,12 +290,52 @@
                 width: 100%;
             }
         }
+        .image-viewer {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    padding-top: 60px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.9);
+}
+
+.viewer-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 85vh;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    animation: zoomIn 0.3s ease;
+}
+
+@keyframes zoomIn {
+    from {transform: scale(0.7); opacity: 0;}
+    to {transform: scale(1); opacity: 1;}
+}
+
+.close-viewer {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: white;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.close-viewer:hover {
+    color: var(--primary);
+}
+
     </style>
 </head>
 <body>
     <div class="background"></div>
     <div class="grid-overlay"></div>
-    
     <div class="popup-overlay" id="welcomePopup">
         <div class="popup-container">
             <button class="popup-close" onclick="closePopup()">&times;</button>
@@ -345,7 +385,12 @@
             </div>
         </div>
     </div>
-    
+    <!-- Image Viewer Modal -->
+<div id="imageViewer" class="image-viewer">
+    <span class="close-viewer">&times;</span>
+    <img class="viewer-content" id="viewerImg">
+</div>
+
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-brand">
@@ -483,13 +528,13 @@
                 </div>
             </div>
         </section>
-
-        <section class="screenshots">
+  <section class="screenshots">
             <h2 class="section-title">App Screenshots</h2>
             <div class="screenshot-grid">
                 <div class="screenshot-item">
                     <div class="screenshot-placeholder">
-                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5;" viewBox="0 0 24 24">
+                        <img src="images/screenshot-dashboard.png" alt="Dashboard View - VIRGO SIGNAL" class="screenshot-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5; display: none;" viewBox="0 0 24 24">
                             <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                         </svg>
                     </div>
@@ -497,7 +542,8 @@
                 </div>
                 <div class="screenshot-item">
                     <div class="screenshot-placeholder">
-                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5;" viewBox="0 0 24 24">
+                        <img src="images/screenshot-prediction.png" alt="Prediction Interface - VIRGO SIGNAL" class="screenshot-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5; display: none;" viewBox="0 0 24 24">
                             <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                         </svg>
                     </div>
@@ -505,24 +551,12 @@
                 </div>
                 <div class="screenshot-item">
                     <div class="screenshot-placeholder">
-                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5;" viewBox="0 0 24 24">
+                        <img src="images/screenshot-analytics.png" alt="Analytics & Stats - VIRGO SIGNAL" class="screenshot-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" loading="lazy">
+                        <svg style="width: 60px; height: 60px; fill: var(--primary); opacity: 0.5; display: none;" viewBox="0 0 24 24">
                             <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
                         </svg>
                     </div>
                     <p class="screenshot-caption">Analytics & Stats</p>
-                </div>
-            </div>
-        </section>
-
-        <section class="video-section">
-            <h2 class="section-title">Watch Demo</h2>
-            <div class="video-container">
-                <div class="video-placeholder">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z"/>
-                    </svg>
-                    <p style="font-size: 1.2rem;">See VIRGO SIGNAL in Action</p>
-                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Replace with your YouTube embed or video URL</p>
                 </div>
             </div>
         </section>
@@ -701,5 +735,37 @@
     </div>
 
     <script src="script.js"></script>
+
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+    const viewer = document.getElementById("imageViewer");
+    const viewerImg = document.getElementById("viewerImg");
+    const closeBtn = document.querySelector(".close-viewer");
+
+    // Select all screenshots
+    const screenshots = document.querySelectorAll(".screenshot-img");
+
+    screenshots.forEach(img => {
+        img.style.cursor = "pointer";
+        img.addEventListener("click", function () {
+            viewer.style.display = "block";
+            viewerImg.src = this.src;
+        });
+    });
+
+    // Close when X is clicked
+    closeBtn.onclick = function () {
+        viewer.style.display = "none";
+    };
+
+    // Close when clicking outside the image
+    viewer.onclick = function (e) {
+        if (e.target === viewer) {
+            viewer.style.display = "none";
+        }
+    };
+});
+</script>
+
 </body>
 </html>

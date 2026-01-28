@@ -209,7 +209,7 @@
             overflow: hidden;
         }
 
-        .nav-link::before {
+        /* .nav-link::before {
             content: '';
             position: absolute;
             top: 0;
@@ -218,11 +218,11 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
             transition: left 0.5s ease;
-        }
+        } */
 
         .nav-link:hover {
             color: var(--primary);
-            transform: translateY(-2px);
+            transform: translateY(0);
             background: var(--primary-light);
             box-shadow: 0 4px 12px var(--shadow);
         }
@@ -1673,4 +1673,34 @@
     .download-info {
         padding: 1.5rem;
     }
+}
+
+/* Screenshot Image Styles */
+.screenshot-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.screenshot-placeholder {
+    position: relative;
+    overflow: hidden;
+}
+
+.screenshot-item:hover .screenshot-img {
+    transform: scale(1.05);
+}
+
+/* Loading animation for images */
+.screenshot-img.loading {
+    opacity: 0.5;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
 }
