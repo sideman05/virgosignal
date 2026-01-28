@@ -186,9 +186,9 @@ function handleDownload(event) {
     let downloadUrl = apkUrl;
     
     if (userAgent.includes('windows')) {
-        downloadUrl = 'YOUR_WINDOWS_DOWNLOAD_LINK';
+        downloadUrl = apkUrl;
     } else if (userAgent.includes('mac')) {
-        downloadUrl = 'YOUR_MAC_DOWNLOAD_LINK';
+        downloadUrl = apkUrl;
     } else if (userAgent.includes('android')) {
         downloadUrl = apkUrl;
     }
@@ -196,7 +196,7 @@ function handleDownload(event) {
     // Create a temporary link to trigger download
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = 'virgo-signal.apk'; // Name of the downloaded file
+    link.download = 'Virgo Signal.apk'; // Name of the downloaded file
     link.style.display = 'none';
     document.body.appendChild(link);
     
