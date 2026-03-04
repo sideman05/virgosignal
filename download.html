@@ -179,7 +179,7 @@ function handleDownload(event) {
     // - Google Drive: Get the direct download link
     // - GitHub Releases: 'https://github.com/username/repo/releases/download/v1.0/app.apk'
     // - Dropbox: Get the direct download link
-    const apkUrl = 'Virgo Signal.apk';
+    const apkUrl = 'app-release.apk'; // Placeholder URL - replace with actual URL to your APK file
     
     // Detect user's OS and provide appropriate download
     const userAgent = navigator.userAgent.toLowerCase();
@@ -196,7 +196,7 @@ function handleDownload(event) {
     // Create a temporary link to trigger download
     const link = document.createElement('a');
     link.href = downloadUrl;
-    link.download = 'Virgo Signal.apk'; // Name of the downloaded file
+    link.download = 'app-release.apk'; // Name of the downloaded file
     link.style.display = 'none';
     document.body.appendChild(link);
     
